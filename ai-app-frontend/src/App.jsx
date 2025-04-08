@@ -20,7 +20,6 @@ function App() {
           <>
             <Link to="/login">Login</Link> |{' '}
             <Link to="/register">Register</Link>
-            <Link to="/logout">Logout</Link>
           </>
         ) : (
           <>
@@ -36,7 +35,6 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/lgout" element={<Logout />} />
         <Route
           path="/dashboard"
           element={
