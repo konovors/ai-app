@@ -1,0 +1,34 @@
+# === Node Modules ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Env Files ===
+.env
+.env.*
+
+# === Logs ===
+logs
+*.log
+*.log.*
+
+# === Build Output ===
+dist/
+build/
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === VSCode ===
+.vscode/
+
+# === Frontend Dev Output (Vite) ===
+ai-app-frontend/dist/
+
+# === Backend Output ===
+ai-app-backend/dist/
+
+# === GitHub Copilot history ===
+*.code-workspace
