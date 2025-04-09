@@ -35,21 +35,21 @@ router.post('/login', async (req, res) => {
     if (!isMatch) return res.status(400).json({ error: 'Pogrešna lozinka' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
-    res.json({ message: 'Uspešna prijava', token });
+    res.json({ message: 'Uspešna prijava', token: token, userId: user._id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-export default router;
-
 // GET /me
 router.get('/me', auth, async (req, res) => {
-    try {
-      const user = await User.findById(req.user.id).select('-password');
-      res.json(user);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  });
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+export default router;
+
+

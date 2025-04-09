@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -7,7 +7,12 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,6 +25,7 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         setMessage('Uspešna prijava!');
+        localStorage.setItem('userId', data.userId);
         localStorage.setItem('token', data.token);
         setTimeout(() => navigate('/dashboard'), 1000);
       } else {
