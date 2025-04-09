@@ -1,6 +1,6 @@
 import express from 'express';
 import OpenAI from 'openai';
-import authMiddleware from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js'; // ✅ ispravno uvezen middleware
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,7 +10,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-router.post('/chat', authMiddleware, async (req, res) => {
+// Zaštićena ruta za slanje AI upita
+router.post('/chat', protect, async (req, res) => {
   const { prompt } = req.body;
 
   if (!prompt) {

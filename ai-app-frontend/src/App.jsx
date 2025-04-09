@@ -2,6 +2,7 @@ import { Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
@@ -14,23 +15,52 @@ function App() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <nav>
-        {!token ? (
-          <>
-            <Link to="/login">Login</Link> |{' '}
-            <Link to="/register">Register</Link>
-          </>
-        ) : (
-          <>
-            <Link to="/dashboard">Dashboard</Link> |{' '}
-            <button onClick={handleLogout} style={{ cursor: 'pointer' }}>
-              Logout
-            </button>
-          </>
-        )}
+    <div className="container mt-3">
+      {/* Bootstrap navigacija */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-light rounded mb-4 px-3">
+        <Link className="navbar-brand fw-bold" to="/">
+          AI App
+        </Link>
+
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {!token ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">
+                    Register
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/dashboard">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profile">
+                    Profil
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button className="btn btn-link nav-link" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </nav>
 
+      {/* Rute */}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
@@ -40,6 +70,14 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           }
         />

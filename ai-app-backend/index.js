@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 
 import testRoutes from './routes/testRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import chatRoutes from './routes/chatRoutes.js'; // ✅ dodatak za AI
+import chatRoutes from './routes/chatRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import companyProfileRoutes from './routes/companyProfile.js'; // ✅ nova ruta za profile
 
 dotenv.config();
 
@@ -21,11 +23,10 @@ mongoose.connect(process.env.MONGO_URI)
 // Rute
 app.use('/api', testRoutes);
 app.use('/api', authRoutes);
-app.use('/api', chatRoutes); // ✅ ruta za /api/chat
+app.use('/api', chatRoutes);
+app.use('/api/users', userRoutes); // ✅ korisnici
+app.use('/api/profile', companyProfileRoutes); // ✅ profil kompanije
 
 // Pokretanje servera
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server radi na portu ${PORT}`));
-
-
-
