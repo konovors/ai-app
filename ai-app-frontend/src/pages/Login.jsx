@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -30,41 +31,42 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
-      >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-          Prijava
-        </h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full px-4 py-2 mb-4 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="password"
-          placeholder="Lozinka"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full px-4 py-2 mb-6 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          Prijavi se
-        </button>
+    <div className="container d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card shadow-sm p-4" style={{ maxWidth: '400px', width: '100%' }}>
+        <h3 className="text-center mb-4">Prijava</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <label>Email adresa</label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Unesite email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group mb-4">
+            <label>Lozinka</label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Unesite lozinku"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100">
+            Prijavi se
+          </button>
+        </form>
         {message && (
-          <p className="mt-4 text-sm text-center text-red-500">{message}</p>
+          <div className="alert alert-danger mt-3 mb-0 py-2 text-center" role="alert">
+            {message}
+          </div>
         )}
-      </form>
-
+      </div>
     </div>
   );
 }

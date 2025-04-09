@@ -64,36 +64,44 @@ function Dashboard() {
   };
 
   return (
-    <div>
-      <h2>Dashboard</h2>
+    <div className="container mt-5">
+      <h2 className="mb-4">Dashboard</h2>
+
       {user ? (
         <>
-          <p>Ulogovani korisnik: {user.email}</p>
-          <button onClick={handleLogout}>Logout</button>
-
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Unesi pitanje za AI"
-              required
-              disabled={isLoading}
-            />
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? 'Čekaj...' : 'Pošalji'}
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <span className="fw-bold">Ulogovani korisnik: {user.email}</span>
+            <button onClick={handleLogout} className="btn btn-outline-danger btn-sm">
+              Logout
             </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="mb-4">
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Unesi pitanje za AI"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                disabled={isLoading}
+                required
+              />
+              <button className="btn btn-primary" type="submit" disabled={isLoading}>
+                {isLoading ? 'Čekaj...' : 'Pošalji'}
+              </button>
+            </div>
           </form>
 
-          <h3>AI Odgovor:</h3>
-          {isLoading ? (
-            <p>⏳ AI razmišlja...</p>
-          ) : (
-            <p>{response}</p>
-          )}
+          <div>
+            <h5>AI Odgovor:</h5>
+            <div className="alert alert-secondary" role="alert">
+              {isLoading ? '⏳ AI razmišlja...' : response || 'Nema odgovora.'}
+            </div>
+          </div>
         </>
       ) : (
-        <p>Učitavanje korisnika...</p>
+        <div className="alert alert-info">Učitavanje korisnika...</div>
       )}
     </div>
   );
