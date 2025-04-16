@@ -1,21 +1,18 @@
+// ✅ chatStreamRoute.js – Streamovana AI komunikacija (Express backend)
 import express from 'express';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
-import { presetProfiles } from '../utils/presetProfiles.js'; // prilagodi putanju ako je drugačija
+import { presetProfiles } from '../utils/presetProfiles.js'; // ✅ putanja prilagodi po potrebi
 
 dotenv.config();
 const router = express.Router();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-/**
- * ✅ GET /chat-stream
- * Streamuje odgovor karakter po karakter (EventSource)
- */
 router.get('/chat-stream', async (req, res) => {
   const messages = JSON.parse(req.query.messages);
-  const presetKey = req.query.preset || 'marketing';
-  const profile = presetProfiles[presetKey] || presetProfiles.marketing;
+  const presetKey = req.query.preset || 'marketing'; // preset iz query-ja (npr. storytelling)
+  const profile = presetProfiles[presetKey] || presetProfiles.marketing; // fallback
 
   if (!messages) {
     return res.status(400).json({ error: 'Nedostaju poruke' });
@@ -31,7 +28,7 @@ router.get('/chat-stream', async (req, res) => {
       model: 'gpt-4-turbo',
       messages,
       stream: true,
-      ...profile,
+      ...profile // ✅ ubacujemo preset profile (temperature, top_p, max_tokens)
     });
 
     let sentSomething = false;
@@ -54,35 +51,6 @@ router.get('/chat-stream', async (req, res) => {
     console.error('❌ Stream greška:', error);
     res.write('data: [ERROR]\n\n');
     res.end();
-  }
-});
-
-/**
- * ✅ POST /chat
- * Koristi se za ne-streamovano generisanje (za duži sadržaj sa brojanjem reči)
- */
-router.post('/chat', async (req, res) => {
-  const { messages, preset = 'marketing' } = req.body;
-
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Poruke su obavezne.' });
-  }
-
-  try {
-    const profile = presetProfiles[preset] || presetProfiles.marketing;
-
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo',
-      messages,
-      stream: false,
-      ...profile,
-    });
-
-    const content = completion.choices?.[0]?.message?.content || '';
-    res.json({ response: content });
-  } catch (error) {
-    console.error('❌ Chat greška:', error);
-    res.status(500).json({ error: 'Greška pri generisanju odgovora.' });
   }
 });
 
