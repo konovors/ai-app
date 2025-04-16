@@ -68,7 +68,7 @@ function Login() {
           </button>
         </form>
         {message && (
-          <div className="alert alert-danger mt-3 mb-0 py-2 text-center" role="alert">
+          <div className="alert alert-success mt-3 mb-0 py-2 text-center" role="alert">
             {message}
           </div>
         )}

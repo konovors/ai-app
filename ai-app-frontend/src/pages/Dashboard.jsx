@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -44,6 +44,18 @@ function Dashboard() {
     setIsLoading(true);
     setResponse('');
 
+    // Koristimo standardan OpenAI "chat" format
+  const messages = [
+    {
+      role: 'system',
+      content: 'Ti si AI asistent koji odgovara jasno, korisno i precizno na srpskom jeziku.',
+    },
+    {
+      role: 'user',
+      content: prompt,
+    }
+  ];
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: 'POST',
@@ -51,7 +63,7 @@ function Dashboard() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ messages }),
       });
 
       const data = await res.json();
@@ -76,6 +88,7 @@ function Dashboard() {
             </button>
           </div>
 
+          {/* 🔍 AI PROMPT */}
           <form onSubmit={handleSubmit} className="mb-4">
             <div className="input-group">
               <input
@@ -98,6 +111,18 @@ function Dashboard() {
             <div className="alert alert-secondary" role="alert">
               {isLoading ? '⏳ AI razmišlja...' : response || 'Nema odgovora.'}
             </div>
+          </div>
+
+          {/* ✅ MODULI */}
+          <div className="card p-4 shadow-sm mt-5">
+            <h4 className="mb-3">🧠 AI Moduli</h4>
+            <ul className="list-group">
+              <li className="list-group-item">
+                <Link to="/seo-expert">🔍 SEO Expert</Link>
+              </li>
+              <li className="list-group-item disabled">🎨 AI Dizajner (uskoro)</li>
+              <li className="list-group-item disabled">📱 Content Expert (uskoro)</li>
+            </ul>
           </div>
         </>
       ) : (

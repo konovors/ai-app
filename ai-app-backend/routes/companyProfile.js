@@ -1,5 +1,7 @@
 import express from 'express';
 import CompanyProfile from '../models/companyProfile.model.js';
+import mongoose from 'mongoose';
+
 
 const router = express.Router();
 
@@ -33,7 +35,19 @@ router.post('/save', async (req, res) => {
 // Dohvati profil kompanije
 router.get('/:userId', async (req, res) => {
   try {
-    const profile = await CompanyProfile.findOne({ userId: req.params.userId });
+    const userId = req.params.userId;
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(userId);
+    if (!isValidObjectId) {
+      console.warn('⛔ Nevalidan userId:', userId);
+      return res.status(400).json({ error: 'Nevalidan userId.' });
+    } 
+    if (!userId) {
+      console.warn('⛔ Nedostaje userId:', userId);
+      return res.status(400).json({ error: 'Nedostaje userId.' });
+    }
+    const profile = await CompanyProfile.findOne({
+      userId: userId,
+    });
 
     if (!profile) {
       return res.status(404).json({ error: 'Profil nije pronađen.' });
@@ -45,5 +59,6 @@ router.get('/:userId', async (req, res) => {
     res.status(500).json({ error: 'Greška pri dohvatanju profila.', details: error.message });
   }
 });
+
 
 export default router;

@@ -4,6 +4,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
+import CompanyProfileEdit from './pages/CompanyProfileEdit';
+import SEOExpert from './pages/SEOExpert'; // ✅ dodat import
 
 function App() {
   const token = localStorage.getItem('token');
@@ -50,6 +52,16 @@ function App() {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link className="nav-link" to="/company-edit">
+                    Company
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/seo-expert">
+                    SEO Expert
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <button className="btn btn-link nav-link" onClick={handleLogout}>
                     Logout
                   </button>
@@ -65,6 +77,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/company-edit" element={<CompanyProfileEdit />} />
         <Route
           path="/dashboard"
           element={
@@ -78,6 +91,14 @@ function App() {
           element={
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/seo-expert"
+          element={
+            <PrivateRoute>
+              <SEOExpert />
             </PrivateRoute>
           }
         />

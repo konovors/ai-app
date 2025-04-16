@@ -1,0 +1,120 @@
+# 📘 AI APP – README
+
+Dobrodošao u AI APP – aplikaciju za generisanje sadržaja uz pomoć AI modula (SEO, Content, Dizajn). Ovaj projekat je podeljen na više funkcionalnih modula i koristi React + Express + MongoDB + OpenAI.
+
+---
+
+## 🧠 Struktura projekta (kompletna sa opisima)
+
+```
+App-root/                          # Glavni root folder aplikacije
+├── backend/                      # Backend server (Express + MongoDB)
+│   ├── controllers/              # (Rezervisano za kontrolere – još nije korišćeno)
+│   ├── middleware/               # (Rezervisano za middlewere – autentikacija itd)
+│   ├── models/                   # Mongoose modeli
+│   │   ├── companyProfile.model.js   # Model za profil kompanije
+│   │   └── user.model.js             # Model za korisnike
+│   ├── routes/                   # API rute backend-a
+│   │   ├── authRoutes.js             # Rute za registraciju/login
+│   │   ├── chatRoutes.js             # Rute za komunikaciju sa AI-jem
+│   │   ├── profileRoutes.js          # Rute za snimanje/dohvatanje company profila
+│   │   ├── testRoutes.js             # Test endpointi
+│   │   └── userRoutes.js             # Ažuriranje korisničkog profila
+│   ├── utils/                    # (Rezervisano za pomoćne funkcije)
+│   └── index.js                  # Ulazna tačka Express servera
+│
+├── public/                       # Statika (favicon, logo...)
+│   └── vite.svg
+│
+├── src/                          # Frontend aplikacija (React)
+│   ├── assets/                   # Ikonice, slike
+│   │   └── logo.svg
+│   ├── components/               # Reusable React komponente
+│   │   ├── PrivateRoute.jsx         # Zaštićene rute (samo ako je user ulogovan)
+│   │   └── seo/                     # Komponente SEO modula
+│   │       └── BlogWriter.jsx         # Forma za blog pisanje na osnovu varijacije
+│   ├── pages/                    # Sve strane u aplikaciji
+│   │   ├── CompanyProfileEdit.jsx   # Prikaz i izmena profila firme (ako već postoji)
+│   │   ├── Dashboard.jsx            # Glavna stranica sa AI interfejsom i modulima
+│   │   ├── Login.jsx                # Stranica za prijavu
+│   │   ├── Profile.jsx              # Korisnički profil (ime, email, lozinka)
+│   │   ├── Register.jsx             # Stranica za registraciju
+│   │   └── SEOExpert.jsx           # Stranica za SEO AI module (BlogWriter, itd.)
+│   ├── utils/
+│   │   └── promptBuilder.js        # Centralna logika za generaciju AI promptova
+│   ├── App.jsx                    # Glavni React app fajl sa rutama
+│   └── main.jsx                   # React root fajl za mountovanje aplikacije
+│
+├── .env                          # Tajne varijable (API ključevi itd.)
+├── .gitignore                    # Ignorisani fajlovi za Git
+├── index.html                    # Ulazna HTML stranica
+├── package-lock.json             # Verzije paketa (lock fajl)
+├── package.json                  # Definicije paketa i skripti
+└── vite.config.js                # Konfiguracija za Vite
+```
+
+---
+
+## 🚀 Pokretanje projekta
+
+### 1. Backend
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+### 2. Frontend
+```bash
+cd App-root
+npm install
+npm run dev
+```
+
+🔐 Dodaj `.env` fajl sa:
+```
+MONGO_URI=...
+OPENAI_API_KEY=...
+PORT=5002
+```
+
+---
+
+## 🧩 SEO Expert modul
+
+Stranica: `SEOExpert.jsx`
+
+- Dropdown za izbor modula (Blog Pisac, SEO stranice...)
+- Dropdown za varijacije (npr. blog na osnovu transkripta)
+- Dinamički učitava odgovarajući modul (npr. `BlogWriter.jsx`)
+- Svi promptovi se generišu preko `promptBuilder.js`
+- Prikaz AI odgovora i dugmad za export (Word/PDF)
+
+### ✅ BlogWriter.jsx
+- Prikazuje formu na osnovu izabrane varijacije
+- Varijacija 1 koristi:
+  - Transkript videa
+  - Website, target audience, word count
+  - Dodatne instrukcije
+- Sve podatke šalje `promptBuilder.js` funkciji `buildPrompt()`
+
+---
+
+## 📌 Napomene
+- Forma i logika generisanja se uvek nalaze u `BlogWriter.jsx`
+- `SEOExpert.jsx` služi samo za kontrolu prikaza modula i generisanog sadržaja
+- Svi promptovi su centralizovani radi lakše modifikacije i nadogradnje
+
+---
+
+## 🛠️ Planirane funkcionalnosti
+
+- [ ] Dodavanje drugih modula (Product Writer, SEO Pages)
+- [ ] Dodavanje korisničkih šablona
+- [ ] Historija prethodnih AI odgovora
+- [ ] Povezivanje sa OpenAI funkcijama direktno
+
+---
+
+Spreman za razvoj dalje 🚀
+
