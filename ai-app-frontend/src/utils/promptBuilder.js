@@ -1,3 +1,4 @@
+// ✅ promptBuilder.js – SEO Blog Pisac za transkript videa
 export const buildPrompt = (module, variation, data) => {
   if (module === 'blog' && variation === '1') {
     const {
@@ -6,46 +7,54 @@ export const buildPrompt = (module, variation, data) => {
       targetAudience = '',
       wordCount = '',
       tone = '',
-      additionalPrompt = ''
+      additionalPrompt = '',
     } = data;
+    
 
     return {
       messages: [
         {
           role: 'system',
-          content: `Ti si iskusni SEO blog pisac. Pišeš isključivo na srpskom jeziku i koristiš validne HTML oznake (<h1>, <h2>, <h3>, <p>, <ul>, <li>). Tvoj zadatak je da napišeš SEO blog post za vebsajt: ${website}.
+          content: `
+Ti si SEO blog pisac sa 10+ godina iskustva. Pišeš na srpskom jeziku, koristiš samo ispravne HTML oznake (<h1>, <h2>, <p>, <ul>, <li>), i NE koristiš markdown.
 
- Ciljna publika: ${targetAudience}
- Ton pisanja: ${tone}
-${additionalPrompt ? `  Dodatne smernice: ${additionalPrompt}` : ''}
+Pratiš IT tržište u Srbiji i znaš šta ljudi pretražuju. Kreiraš edukativne, informativne i kreativne blog postove koji se visoko rangiraju na Google-u.
 
- Ne koristi markdown. Ne koristi naslove izvan HTML strukture.`
+Zadatak:
+- Vebsajt: ${website}
+- Ciljna publika: ${targetAudience}
+- Ton pisanja: ${tone}
+${additionalPrompt ? `- Dodatne smernice: ${additionalPrompt}` : ''}
+
+**Struktura (strogo po redosledu):**
+1. <h1> – SEO naslov (maks. 20 reči)
+2. <p> – Uvod (TAČNO 200 reči)
+3. Šest puta: <h2> + <p> (svaka sekcija 130–135 reči, ukupno ~800)
+4. <h2> FAQ</h2> – tačno 5 pitanja (<h3>) i 5 odgovora (<p>, 100–110 reči svaki)
+5. <h2> Zaključak</h2> – TAČNO 200 reči (pojavljuje se SAMO JEDNOM, na kraju)
+
+⚠️ NE SMEŠ:
+- ponavljati ili duplirati bilo koji pasus iz uvoda, SEO sekcija, FAQ-a ili zaključka
+- menjati redosled
+- dodavati outro, call‑to‑action ili promotivne sekcije
+- pisati sekcije izvan zadatih broja reči
+
+**Linkovi:**
+- Umetni 2 interna linka ka https://konovo.rs/blog/  
+- Umetni 2 interna linka ka https://konovo.rs/shop/  
+
+Generiši čist HTML prema strukturi i tačnom wordCount broju reči.`
         },
         {
           role: 'user',
-          content: `Na osnovu sledećeg transkripta:\n\n"${transcript}"\n\nNapiši kompletan SEO blog post u čistom HTML formatu.
+          content: `Na osnovu sledećeg transkripta:
 
-- Smernice koje moraš striktno da ispoštuješ:
-- Ukupna dužina: tačno ${wordCount} reči (ni manje ni više)
-- Koristi isključivo HTML (<h1>, <h2>, <p>, <ul>, <li>)
-- NE koristi markdown, **, <strong>, <br>, ili bilo koji nepropisan tag
-- Svaka sekcija mora imati svoj <h2> naslov i <p> paragraf
-- NE grupiši više sekcija u jedan naslov/paragraf
-- NE preskači zaključak
-- NE dodaj outro, call-to-action ili promotivne poruke
+"${transcript}"
 
- Struktura teksta:
-1. <h1> – SEO naslov
-2. <p> – Uvod (200 reči)
-3. <h2> + <p> – 6 SEO sekcija (400 reči po sekciji)
-4. <h2> – FAQ sekcija (<h3> 5 pitanja i 5 odgovora <p>, 150 reči po odgovoru)
-5. <h2> – Zaključak ( Maksimalno do 200 reči)
-
-⚠️ Ako ne možeš da ispuniš sve zbog ograničenja broja reči, skrati FAQ sekciju pre bilo koje druge. Zaključak je obavezan.`
+Napiši kompletan SEO blog post u tačno ${wordCount} reči, prema zadatoj strukturi.`
         }
       ]
     };
   }
-
   return { messages: [] };
 };

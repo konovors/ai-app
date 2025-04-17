@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { buildPrompt } from '../../utils/promptBuilder';
-import { countTokens } from '../../utils/tokenCounter';
 import ExportButtons from '../common/ExportButtons';
 import MarkdownPreview from '../common/MarkdownPreview';
 import { generateLongContent } from '../../utils/generateLongContent';
@@ -60,7 +59,7 @@ const BlogWriter = ({ variation }) => {
       targetAudience,
       wordCount,
       additionalPrompt,
-      tone: selectedTone, // ✅ koristi lep opis tona
+      tone: selectedTone,
     });
 
     const userPrompt = messages.find((msg) => msg.role === 'user')?.content || '';
@@ -70,10 +69,11 @@ const BlogWriter = ({ variation }) => {
     setPreviewMessages(JSON.stringify(messages, null, 2));
 
     try {
-      const fullText = await generateLongContent(messages, minWords, 4, selectedPreset || 'blog_standard');
+      // generateLongContent vraća { content, stats }
+      const { content: fullText, stats } = await generateLongContent(messages, minWords);
       setAiResponse(fullText);
       setDisplayedText(fullText);
-      setOutputTokenInfo(countTokens(fullText));
+      setOutputTokenInfo(stats);
     } catch (err) {
       console.error('❌ Greška pri generisanju:', err);
       setAiResponse('❌ Greška pri generisanju sadržaja.');
@@ -88,27 +88,56 @@ const BlogWriter = ({ variation }) => {
         <>
           <div className="mb-3">
             <label className="form-label">Transkript videa</label>
-            <textarea className="form-control" rows={3} value={transcript} onChange={(e) => setTranscript(e.target.value)} />
+            <textarea
+              className="form-control"
+              rows={3}
+              value={transcript}
+              onChange={(e) => setTranscript(e.target.value)}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Website</label>
-            <input type="text" className="form-control" value={website} onChange={(e) => setWebsite(e.target.value)} />
+            <input
+              type="text"
+              className="form-control"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Ciljna publika</label>
-            <input type="text" className="form-control" value={targetAudience} onChange={(e) => setTargetAudience(e.target.value)} />
+            <input
+              type="text"
+              className="form-control"
+              value={targetAudience}
+              onChange={(e) => setTargetAudience(e.target.value)}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Minimalan broj reči</label>
-            <input type="number" className="form-control" value={wordCount} onChange={(e) => setWordCount(e.target.value)} />
+            <input
+              type="number"
+              className="form-control"
+              value={wordCount}
+              onChange={(e) => setWordCount(e.target.value)}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Dodatne instrukcije (opciono)</label>
-            <textarea className="form-control" rows={2} value={additionalPrompt} onChange={(e) => setAdditionalPrompt(e.target.value)} />
+            <textarea
+              className="form-control"
+              rows={2}
+              value={additionalPrompt}
+              onChange={(e) => setAdditionalPrompt(e.target.value)}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Stil pisanja (preset)</label>
-            <select className="form-select" value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+            <select
+              className="form-select"
+              value={selectedPreset}
+              onChange={(e) => setSelectedPreset(e.target.value)}
+            >
               <option value="">Automatski (preporučeno)</option>
               <option value="marketing">🎯 Marketing</option>
               <option value="blog_standard">📰 Blog Standard</option>
@@ -116,7 +145,11 @@ const BlogWriter = ({ variation }) => {
               <option value="technical">🧠 Tehnički</option>
               <option value="wild_creative">🤪 Eksperimentalno</option>
             </select>
-            {selectedPreset && <small className="form-text text-muted mt-1">{presetDescriptions[selectedPreset]}</small>}
+            {selectedPreset && (
+              <small className="form-text text-muted mt-1">
+                {presetDescriptions[selectedPreset]}
+              </small>
+            )}
           </div>
         </>
       )}
@@ -129,11 +162,21 @@ const BlogWriter = ({ variation }) => {
         <div className="mt-4">
           <div className="d-flex justify-content-between align-items-center mb-2">
             <label className="form-label mb-0">🧪 Pregled generisanog prompta</label>
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowRawJson((prev) => !prev)}>
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-secondary"
+              onClick={() => setShowRawJson((prev) => !prev)}
+            >
               {showRawJson ? 'Prikaži kao tekst' : 'Prikaži kao JSON'}
             </button>
           </div>
-          <textarea className="form-control" rows={10} readOnly value={showRawJson ? previewMessages : previewPrompt} style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace' }} />
+          <textarea
+            className="form-control"
+            rows={10}
+            readOnly
+            value={showRawJson ? previewMessages : previewPrompt}
+            style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}
+          />
         </div>
       )}
 
@@ -143,11 +186,12 @@ const BlogWriter = ({ variation }) => {
           <div className="border rounded p-3 bg-white">
             <MarkdownPreview markdown={displayedText} />
           </div>
-          {loading && <span className="animate-blink">|</span>}
           <div ref={bottomRef} />
           {outputTokenInfo && (
             <div className="text-muted mt-2">
-              📊 Tokena: <strong>{outputTokenInfo.tokens}</strong> · Reči: <strong>{outputTokenInfo.words}</strong> · Karaktera: <strong>{outputTokenInfo.characters}</strong>
+              📊 Tokena: <strong>{outputTokenInfo.tokens}</strong> · Reči:{' '}
+              <strong>{outputTokenInfo.words}</strong> · Karaktera:{' '}
+              <strong>{outputTokenInfo.characters}</strong>
             </div>
           )}
           <div className="mt-3">
