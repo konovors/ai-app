@@ -34,8 +34,8 @@ const SEOExpert = () => {
           onChange={(e) => setVariation(e.target.value)}
         >
           <option value="1">🎬 Blog post – transkript videa</option>
-          <option value="2" disabled>🔁 Varijacija 2 (uskoro)</option>
-          <option value="3" disabled>🔁 Varijacija 3 (uskoro)</option>
+          <option value="2">📝 Blog post – na zadatu temu</option>
+          <option value="3">🔁 Blog post na osnovu naslova i ključnih reči </option>
         </select>
       </div>
 
