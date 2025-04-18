@@ -1,8 +1,9 @@
+// ✅ src/components/BlogWriter.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { buildPrompt } from '../../utils/promptBuilder';
 import ExportButtons from '../common/ExportButtons';
 import MarkdownPreview from '../common/MarkdownPreview';
-import { generateLongContent } from '../../utils/generateLongContent';
+import { generateBlogWithAgent } from '../../agents/BlogAgent';
 
 const BlogWriter = ({ variation }) => {
   const [transcript, setTranscript] = useState('');
@@ -53,26 +54,24 @@ const BlogWriter = ({ variation }) => {
     setOutputTokenInfo(null);
 
     const selectedTone = toneMap[selectedPreset] || 'Balansiran i optimizovan za SEO.';
-    const { messages } = buildPrompt('blog', variation, {
+    const blogData = {
       transcript,
       website,
       targetAudience,
       wordCount,
       additionalPrompt,
-      tone: selectedTone,
-    });
+      tone: selectedTone
+    };
 
-    const userPrompt = messages.find((msg) => msg.role === 'user')?.content || '';
-    const minWords = parseInt(wordCount) || 1200;
-
+    const { messages } = buildPrompt('blog', variation, blogData);
+    const userPrompt = messages.find((m) => m.role === 'user')?.content || '';
     setPreviewPrompt(userPrompt);
     setPreviewMessages(JSON.stringify(messages, null, 2));
 
     try {
-      // generateLongContent vraća { content, stats }
-      const { content: fullText, stats } = await generateLongContent(messages, minWords);
-      setAiResponse(fullText);
-      setDisplayedText(fullText);
+      const { content, stats } = await generateBlogWithAgent(blogData);
+      setAiResponse(content);
+      setDisplayedText(content);
       setOutputTokenInfo(stats);
     } catch (err) {
       console.error('❌ Greška pri generisanju:', err);
